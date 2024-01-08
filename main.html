@@ -64,41 +64,100 @@
 </div>
 
 <script>
+const UNKNOWN_TITLE="???????";
 
-// Functions for selecting the wheel type
-// TODO: populate the text from a pool of options
+// selectUnique returns an array of length toSelect that contain unique random numbers in the provided range
+function selectUnique(toSelect, range) {
+    var arr = [];
+    while(arr.length < toSelect){
+        var r = Math.floor(Math.random() * range);
+        if(arr.indexOf(r) === -1) arr.push(r);
+    }
+    return arr;
+}
+
+// buildOptionHTML builds the html for the options provided
+//   gameMap: map of all games
+//   games: array of game numbers to choose (generated from selectUnique)
+//   type: name of game type. Used to populate "data-type" attribute
+function buildOptionHTML(gameMap, games, type) {
+    var html = "";
+    for (var i = 0; i < games.length; i++) {
+        let game = gameMap.get(games[i]);
+        let name = "";
+        if (game.seen) {
+            name = game.name;
+        } else {
+            name = UNKNOWN_TITLE;
+        }
+        html += '<div class="option" data-game="' + games[i] + '" data-type="' + type + '"><p>' + name + '</p></div>';
+    }
+    return html;
+}
+
+// displayOptions updates the options to be displayed
+function displayOptions(optionsDisplayed, gamesMap, gameType) {
+    var arr = selectUnique(optionsDisplayed, gamesMap.size);
+    console.log(arr);
+
+    var html = buildOptionHTML(gamesMap, arr, gameType);
+    console.log(html);
+
+    document.getElementById("wheel").innerHTML = html;
+}
+
+const DUELS_DISPLAYED = 4;
+const DUEL_TYPE = "duel";
+const DUEL_GAMES = new Map([
+    [0, {name: "Duel Game #1", seen: false}],
+    [1, {name: "Duel Game #2", seen: false}],
+    [2, {name: "Duel Game #3", seen: false}],
+    [3, {name: "Duel Game #4", seen: false}],
+    [4, {name: "Duel Game #5", seen: false}],
+    [5, {name: "Duel Game #6", seen: false}],
+    [6, {name: "Duel Game #7", seen: false}],
+    [7, {name: "Duel Game #8", seen: false}],
+    [8, {name: "Duel Game #9", seen: false}],
+]);
 function displayDuels() {
-    document.getElementById("wheel").innerHTML = '\
-    <div class="option"><p>Duel 1</p></div>\
-    <div class="option"><p>Duel 2</p></div>\
-    <div class="option"><p>Duel 3</p></div>\
-    <div class="option"><p>Duel 4</p></div>\
-'
+    displayOptions(DUELS_DISPLAYED, DUEL_GAMES, DUEL_TYPE);
 }
 
+const SOLOS_DISPLAYED = 3;
+const SOLOS_TYPE = "solo";
+const SOLO_GAMES = new Map([
+    [0, {name: "Solo Game #1", seen: false}],
+    [1, {name: "Solo Game #2", seen: false}],
+    [2, {name: "Solo Game #3", seen: false}],
+    [3, {name: "Solo Game #4", seen: false}],
+    [4, {name: "Solo Game #5", seen: false}],
+    [5, {name: "Solo Game #6", seen: false}],
+    [6, {name: "Solo Game #7", seen: false}],
+])
 function displaySolo() {
-    document.getElementById("wheel").innerHTML = '\
-    <div class="option"><p>Solo 1</p></div>\
-    <div class="option"><p>Solo 2</p></div>\
-    <div class="option"><p>Solo 3</p></div>\
-'
+    displayOptions(SOLOS_DISPLAYED, SOLO_GAMES, SOLOS_TYPE);
 }
 
+const FOURS_DISPLAYED = 4;
+const FOURS_TYPE = "four";
+const FOUR_GAMES = new Map([
+    [0, {name: "4 Player Game #1", seen: false}],
+    [1, {name: "4 Player Game #2", seen: false}],
+    [2, {name: "4 Player Game #3", seen: false}],
+    [3, {name: "4 Player Game #4", seen: false}],
+    [4, {name: "4 Player Game #5", seen: false}],
+    [5, {name: "4 Player Game #6", seen: false}],
+])
 function display4Player() {
-    document.getElementById("wheel").innerHTML = '\
-    <div class="option"><p>4 Player 1</p></div>\
-    <div class="option"><p>4 Player 2</p></div>\
-    <div class="option"><p>4 Player 3</p></div>\
-    <div class="option"><p>4 Player 4</p></div>\
-'
+    displayOptions(FOURS_DISPLAYED, FOUR_GAMES, FOURS_TYPE);
 }
 
 // Variables for configuring the selector settings
-var ITERATIONS = 60;
-var START_SPEED = 5;
-var SPEED_BASE = 1.04;
-var FLASHES = 8;
-var FLASH_SPEED = 100;
+const ITERATIONS = 60;
+const START_SPEED = 5;
+const SPEED_BASE = 1.04;
+const FLASHES = 8;
+const FLASH_SPEED = 100;
 
 // selectGame randomly selects a game from the list currently visible
 function selectGame() {
@@ -142,6 +201,30 @@ function selectGame() {
         id = setInterval(flash, FLASH_SPEED);
         let i = 0;
         let choice = document.getElementsByClassName("highlighted")[0]
+        
+        // reveal the choice if it hasn't been revealed yet
+        if (choice.textContent == UNKNOWN_TITLE) {
+            num = choice.getAttribute("data-game");
+            game = null;
+            switch(choice.getAttribute("data-type")) {
+                case DUEL_TYPE:
+                    game = DUEL_GAMES.get(parseInt(num));
+                    game.seen = true;
+                    DUEL_GAMES.set(parseInt(num), game);
+                    break;
+                case SOLOS_TYPE:
+                    game = SOLO_GAMES.get(parseInt(num));
+                    game.seen = true;
+                    SOLO_GAMES.set(parseInt(num), game);
+                    break;
+                case FOURS_TYPE:
+                    game = FOUR_GAMES.get(parseInt(num));
+                    game.seen = true;
+                    FOUR_GAMES.set(parseInt(num), game);
+                    break;
+            }
+            choice.textContent = game.name;
+        }
         function flash() {
             if (i == FLASHES) {
                 clearInterval(id);
