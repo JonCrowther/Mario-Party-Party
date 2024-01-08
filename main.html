@@ -51,6 +51,7 @@
     <button class="gameButton" onclick="displaySolo()">Solo</button>
 </div>
 
+<!-- TODO: Make this wheel stay the same size no matter the options -->
 <div id ="wheel" padding="10px">
     <div class="option"><p>Option1</p></div>
     <div class="option"><p>Option2</p></div>
@@ -59,11 +60,13 @@
 </div>
 
 <div class="center">
-    <p><button onclick="myRandom()" class="spinButton">Click Me</button></p>
+    <p><button onclick="selectGame()" class="spinButton">Click Me</button></p>
 </div>
 
 <script>
 
+// Functions for selecting the wheel type
+// TODO: populate the text from a pool of options
 function displayDuels() {
     document.getElementById("wheel").innerHTML = '\
     <div class="option"><p>Duel 1</p></div>\
@@ -90,40 +93,57 @@ function display4Player() {
 '
 }
 
-function myRandom() {
+// Variables for configuring the selector settings
+var ITERATIONS = 60;
+var START_SPEED = 5;
+var SPEED_BASE = 1.04;
+var FLASHES = 8;
+var FLASH_SPEED = 100;
+
+// selectGame randomly selects a game from the list currently visible
+function selectGame() {
+    // Start at a random position
     let numOpts = document.getElementsByClassName("option").length;
-    let start = Math.floor(Math.random()*numOpts);
-    const iterations = 60 + start;
+    let position = Math.floor(Math.random()*numOpts);
+    const iterations = ITERATIONS + position;
+    
     let id = null;
+    let speed = START_SPEED;
     clearInterval(id);
-    let speed = 5;
-    id = setInterval(frame, speed);
-    function frame() {
-        if (start == iterations) {
+    id = setInterval(cycle_options, speed);
+    
+    // cycle the highlighted option. The winner is already chosen, but this makes it fun
+    function cycle_options() {
+        if (position == iterations) {
             clearInterval(id);
             winner();
         } else {
+            // deselect currently highlighted option
             var highlighted = document.getElementsByClassName("highlighted");
             for (var i = 0; i < highlighted.length; i++) {
                 highlighted[i].setAttribute("class","option");
             }
             
+            // highlight our new option
             var opts = document.getElementsByClassName("option");
-            opts[start%numOpts].setAttribute("class", "highlighted option");
-            start++;
+            opts[position%numOpts].setAttribute("class", "highlighted option");
+            position++;
 
-            speed += Math.pow(1.04, start);
+            // increase the interval at which we cycle through the options exponentially
+            // gives it a nice "slowing down" feel. Linear doesn't feel as nice
+            speed += Math.pow(SPEED_BASE, position);
             clearInterval(id);
-            id = setInterval(frame, speed);
+            id = setInterval(cycle_options, speed);
         }
     }
 
+    // make the winning option flash. Note: FLASH_SPEED needs to be even, otherwise the winner ends up de-highlighted
     function winner() {
-        id = setInterval(flash, 100);
+        id = setInterval(flash, FLASH_SPEED);
         let i = 0;
         let choice = document.getElementsByClassName("highlighted")[0]
         function flash() {
-            if (i == 8) {
+            if (i == FLASHES) {
                 clearInterval(id);
             } else {
                 let myClass = choice.getAttribute("class");
