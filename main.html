@@ -13,34 +13,87 @@
     font-size: x-large;
 }
 .highlighted {
-    width: 800px;
-    height: 200px;
-    line-height: 200px;
-    position: relative;
     background: darkblue;
+}
+.gameButton {
+    width: 200px;
+    margin: auto;
+    display: inline;
+}
+.spinButton {
+    width: 200px;
+    margin: auto;
+    display: inline;
+}
+.gameTypes {
     margin: auto;
     width: 50%;
-    text-align: center;
-    font-size: x-large;
+    border: 3px solid green;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
 }
 
 </style>
 <body>
-<p><button onclick="myRandom()">Click Me</button></p>
-<p id="num">100</p>
-<div id ="wheel" >
+
+<div class="gameTypes">
+    <button class="gameButton" onclick="displayDuels()">Duel</button>
+    <button class="gameButton" onclick="display4Player()">4 Person</button>
+    <button class="gameButton" onclick="displaySolo()">Solo</button>
+</div>
+
+<div id ="wheel" padding="10px">
     <div class="option"><p>Option1</p></div>
     <div class="option"><p>Option2</p></div>
     <div class="option"><p>Option3</p></div>
     <div class="option"><p>Option4</p></div>
 </div>
 
+<div class="center">
+    <p><button onclick="myRandom()" class="spinButton">Click Me</button></p>
+</div>
+
 <script>
 
+function displayDuels() {
+    document.getElementById("wheel").innerHTML = '\
+    <div class="option"><p>Duel 1</p></div>\
+    <div class="option"><p>Duel 2</p></div>\
+    <div class="option"><p>Duel 3</p></div>\
+    <div class="option"><p>Duel 4</p></div>\
+'
+}
+
+function displaySolo() {
+    document.getElementById("wheel").innerHTML = '\
+    <div class="option"><p>Solo 1</p></div>\
+    <div class="option"><p>Solo 2</p></div>\
+    <div class="option"><p>Solo 3</p></div>\
+'
+}
+
+function display4Player() {
+    document.getElementById("wheel").innerHTML = '\
+    <div class="option"><p>4 Player 1</p></div>\
+    <div class="option"><p>4 Player 2</p></div>\
+    <div class="option"><p>4 Player 3</p></div>\
+    <div class="option"><p>4 Player 4</p></div>\
+'
+}
+
 function myRandom() {
-    let start = Math.floor(Math.random()*4);
+    let numOpts = document.getElementsByClassName("option").length;
+    let start = Math.floor(Math.random()*numOpts);
     const iterations = 60 + start;
-    document.getElementById("num").textContent = start;
     let id = null;
     clearInterval(id);
     let speed = 5;
@@ -56,7 +109,7 @@ function myRandom() {
             }
             
             var opts = document.getElementsByClassName("option");
-            opts[start%4].setAttribute("class", "highlighted");
+            opts[start%numOpts].setAttribute("class", "highlighted option");
             start++;
 
             speed += Math.pow(1.04, start);
@@ -74,10 +127,10 @@ function myRandom() {
                 clearInterval(id);
             } else {
                 let myClass = choice.getAttribute("class");
-                if (myClass == "highlighted") {
+                if (myClass == "highlighted option") {
                     choice.setAttribute("class","option");
                 } else {
-                    choice.setAttribute("class","highlighted");
+                    choice.setAttribute("class","highlighted option");
                 }
                 i++;
             }
