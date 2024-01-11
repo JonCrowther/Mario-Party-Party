@@ -45,10 +45,26 @@
 </style>
 <body>
 
+<div>
+    <input type="radio" id="beep1" name="sfx" value="beep1.wav">
+    <label for="beep1">BEEP1</label>
+    <input type="radio" id="beep2" name="sfx" value="beep2.wav">
+    <label for="beep2">BEEP2</label>
+    <input type="radio" id="beep3" name="sfx" value="beep3.wav">
+    <label for="beep3">BEEP3</label>
+    <input type="radio" id="click1" name="sfx" value="click1.wav">
+    <label for="click1">CLICK1</label>
+    <input type="radio" id="click2" name="sfx" value="click2.wav">
+    <label for="click2">CLICK2</label>
+    <input type="radio" id="click3" name="sfx" value="click3.wav">
+    <label for="click3">CLICK3</label>
+    <input type="radio" id="click4" name="sfx" value="click4.wav">
+    <label for="click4">CLICK4</label>
+</div>
 <div class="gameTypes">
     <button class="gameButton" onclick="displayDuels()">Duel</button>
     <button class="gameButton" onclick="display4Player()">4 Person</button>
-    <button class="gameButton" onclick="displaySolo()">Solo</button>
+    <button class="gameButton" onclick="displayDoubles()">Doubles</button>
 </div>
 
 <!-- TODO: Make this wheel stay the same size no matter the options -->
@@ -59,9 +75,8 @@
     <div class="option"><p>Option4</p></div>
 </div>
 
-<div class="center">
-    <p><button onclick="selectGame()" class="spinButton">Click Me</button></p>
-</div>
+<!-- Once I've selected a wheel noise, put it in here -->
+<audio id="beep" src="sounds/click1.wav"></audio>
 
 <script>
 const UNKNOWN_TITLE="???????";
@@ -106,55 +121,56 @@ function displayOptions(optionsDisplayed, gamesMap, gameType) {
     document.getElementById("wheel").innerHTML = html;
 }
 
-const DUELS_DISPLAYED = 4;
+const DUELS_DISPLAYED = 3;
 const DUEL_TYPE = "duel";
 const DUEL_GAMES = new Map([
-    [0, {name: "Duel Game #1", seen: false}],
-    [1, {name: "Duel Game #2", seen: false}],
-    [2, {name: "Duel Game #3", seen: false}],
-    [3, {name: "Duel Game #4", seen: false}],
-    [4, {name: "Duel Game #5", seen: false}],
-    [5, {name: "Duel Game #6", seen: false}],
-    [6, {name: "Duel Game #7", seen: false}],
-    [7, {name: "Duel Game #8", seen: false}],
-    [8, {name: "Duel Game #9", seen: false}],
+    [0, {name: "Klask", seen: false}],
+    [1, {name: "Foosketball", seen: false}],
+    [2, {name: "Mitten Masters", seen: false}],
+    [3, {name: "Show and Tell!", seen: false}],
+    [4, {name: "Spaghetti Slice", seen: false}],
+    [5, {name: "Trace Race", seen: false}],
+    [6, {name: "Getting Handsy", seen: false}],
 ]);
 function displayDuels() {
     displayOptions(DUELS_DISPLAYED, DUEL_GAMES, DUEL_TYPE);
-}
-
-const SOLOS_DISPLAYED = 3;
-const SOLOS_TYPE = "solo";
-const SOLO_GAMES = new Map([
-    [0, {name: "Solo Game #1", seen: false}],
-    [1, {name: "Solo Game #2", seen: false}],
-    [2, {name: "Solo Game #3", seen: false}],
-    [3, {name: "Solo Game #4", seen: false}],
-    [4, {name: "Solo Game #5", seen: false}],
-    [5, {name: "Solo Game #6", seen: false}],
-    [6, {name: "Solo Game #7", seen: false}],
-])
-function displaySolo() {
-    displayOptions(SOLOS_DISPLAYED, SOLO_GAMES, SOLOS_TYPE);
+    selectGame();
 }
 
 const FOURS_DISPLAYED = 4;
 const FOURS_TYPE = "four";
 const FOUR_GAMES = new Map([
-    [0, {name: "4 Player Game #1", seen: false}],
-    [1, {name: "4 Player Game #2", seen: false}],
-    [2, {name: "4 Player Game #3", seen: false}],
-    [3, {name: "4 Player Game #4", seen: false}],
-    [4, {name: "4 Player Game #5", seen: false}],
-    [5, {name: "4 Player Game #6", seen: false}],
-])
+    [0, {name: "Blow the Joker", seen: false}],
+    [1, {name: "Eye to Eye", seen: false}],
+    [2, {name: "Fork 'em Over", seen: false}],
+    [3, {name: "Cereal Thrillers", seen: false}],
+    [4, {name: "Loony Spoons", seen: false}],
+    [5, {name: "Ping Pong Panic", seen: false}],
+    [6, {name: "Stacks on Stacks", seen: false}],
+    [7, {name: "Hips Don't Lie", seen: false}],
+    [8, {name: "Scrabble Dabble", seen: false}],
+    [9, {name: "Air Headed", seen: false}],
+]);
 function display4Player() {
     displayOptions(FOURS_DISPLAYED, FOUR_GAMES, FOURS_TYPE);
+    selectGame();
+}
+
+const DOUBLES_DISPLAYED = 3;
+const DOUBLES_TYPE = "double";
+const DOUBLE_GAMES = new Map([
+    [0, {name: "Got Your Back", seen: false}],
+    [1, {name: "Puzzle Partners", seen: false}],
+    [2, {name: "Catch Me If You Can", seen: false}],
+]);
+function displayDoubles() {
+    displayOptions(DOUBLES_DISPLAYED, DOUBLE_GAMES, DOUBLES_TYPE);
+    selectGame();
 }
 
 // Variables for configuring the selector settings
 const ITERATIONS = 60;
-const START_SPEED = 5;
+const START_SPEED = 75;
 const SPEED_BASE = 1.04;
 const FLASHES = 8;
 const FLASH_SPEED = 100;
@@ -188,6 +204,16 @@ function selectGame() {
             opts[position%numOpts].setAttribute("class", "highlighted option");
             position++;
 
+            // play a sound
+            // currently uses the radio buttons for testing, once a sound is selected,
+            // uncomment code to use it. Needs the pause otherwise it plays poorly
+            //var sound = document.getElementById("beep");
+            var sfx = document.querySelector('input[name="sfx"]:checked').value;
+            var sound = new Audio("sounds/"+sfx);
+            //sound.pause();
+            //sound.currentTime = 0;
+            sound.play();
+            
             // increase the interval at which we cycle through the options exponentially
             // gives it a nice "slowing down" feel. Linear doesn't feel as nice
             speed += Math.pow(SPEED_BASE, position);
@@ -212,10 +238,10 @@ function selectGame() {
                     game.seen = true;
                     DUEL_GAMES.set(parseInt(num), game);
                     break;
-                case SOLOS_TYPE:
-                    game = SOLO_GAMES.get(parseInt(num));
+                case DOUBLES_TYPE:
+                    game = DOUBLE_GAMES.get(parseInt(num));
                     game.seen = true;
-                    SOLO_GAMES.set(parseInt(num), game);
+                    DOUBLE_GAMES.set(parseInt(num), game);
                     break;
                 case FOURS_TYPE:
                     game = FOUR_GAMES.get(parseInt(num));
