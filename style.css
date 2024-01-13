@@ -1,0 +1,40 @@
+.option {
+    width: 800px;
+    height: 200px;
+    line-height: 200px;
+    position: relative;
+    background: lightblue;
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    font-size: x-large;
+}
+.highlighted {
+    background: darkblue;
+}
+.gameButton {
+    width: 200px;
+    margin: auto;
+    display: inline;
+}
+.spinButton {
+    width: 200px;
+    margin: auto;
+    display: inline;
+}
+.gameTypes {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+.center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+}
