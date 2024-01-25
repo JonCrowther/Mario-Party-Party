@@ -88,10 +88,10 @@ function displayDoubles() {
 }
 
 // Variables for configuring the selector settings
-const ITERATIONS = 60;
+const ITERATIONS = 10; //default 60
 const START_SPEED = 75;
 const SPEED_BASE = 1.04;
-const FLASHES = 8;
+const FLASHES = 20; // must be even
 const FLASH_SPEED = 100;
 
 // selectGame randomly selects a game from the list currently visible
@@ -143,10 +143,36 @@ function selectGame() {
 
     // make the winning option flash. Note: FLASH_SPEED needs to be even, otherwise the winner ends up de-highlighted
     function winner() {
-        id = setInterval(flash, FLASH_SPEED);
         let i = 0;
-        let choice = document.getElementsByClassName("highlighted")[0]
-        
+        let choice = document.getElementsByClassName("highlighted")[0];
+
+        // play the winning sound
+        var sfx = document.querySelector('input[name="win"]:checked').value;
+        let flashes = FLASHES;
+        let flash_speed = FLASH_SPEED;
+        switch(sfx) {
+            case "win1.wav":
+                flash_speed = 150;
+                flashes = 6;
+                break;
+            case "win2.wav":
+                flashes = 20;
+                break;
+            case "win3.wav":
+                flashes = 18;
+                break;
+            case "win4.wav":
+                flashes = 20;
+                break;
+            case "win5.wav":
+                flashes = 6;
+                flash_speed = 300;
+                break;
+        }
+        var sound = new Audio("sounds/"+sfx);
+        sound.play();
+        id = setInterval(flash, flash_speed);
+
         // reveal the choice if it hasn't been revealed yet
         if (choice.textContent == UNKNOWN_TITLE) {
             num = choice.getAttribute("data-game");
@@ -171,7 +197,7 @@ function selectGame() {
             choice.textContent = game.name;
         }
         function flash() {
-            if (i == FLASHES) {
+            if (i == flashes) {
                 clearInterval(id);
             } else {
                 let myClass = choice.getAttribute("class");
