@@ -69,6 +69,9 @@ const FOUR_GAMES = new Map([
     [7, {name: "Hips Don't Lie", seen: false}],
     [8, {name: "Scrabble Dabble", seen: false}],
     [9, {name: "Air Headed", seen: false}],
+    [10, {name: "Touch the Cat", seen: false}],
+    [11, {name: "On a Roll", seen: false}],
+    [12, {name: "Money Grab", seen: false}],
 ]);
 function display4Player() {
     displayOptions(FOURS_DISPLAYED, FOUR_GAMES, FOURS_TYPE);
