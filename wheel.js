@@ -10,11 +10,11 @@ function selectUnique(toSelect, range) {
     return arr;
 }
 
-// buildOptionHTML builds the html for the options provided
+// buildGameHTML builds the html for the options provided
 //   gameMap: map of all games
 //   games: array of game numbers to choose (generated from selectUnique)
 //   type: name of game type. Used to populate "data-type" attribute
-function buildOptionHTML(gameMap, games, type) {
+function buildGameHTML(gameMap, games, type) {
     var html = "";
     for (var i = 0; i < games.length; i++) {
         let game = gameMap.get(games[i]);
@@ -29,14 +29,28 @@ function buildOptionHTML(gameMap, games, type) {
     return html;
 }
 
-// displayOptions updates the options to be displayed
-function displayOptions(optionsDisplayed, gamesMap, gameType) {
+function buildPriceHTML(prices) {
+    var html = "";
+    for (var i = 0; i < prices.length; i++) {
+        let name = prices[i];
+        html += '<div class="option"><p>' + name + '</p></div>';
+    }
+    return html;
+}
+
+// displayRandomGames updates the options to be displayed
+function displayRandomGames(optionsDisplayed, gamesMap, gameType) {
     var arr = selectUnique(optionsDisplayed, gamesMap.size);
     console.log(arr);
 
-    var html = buildOptionHTML(gamesMap, arr, gameType);
+    var html = buildGameHTML(gamesMap, arr, gameType);
     console.log(html);
 
+    document.getElementById("wheel").innerHTML = html;
+}
+
+function displayPrices(prices) {
+    var html = buildPriceHTML(prices);
     document.getElementById("wheel").innerHTML = html;
 }
 
@@ -52,7 +66,7 @@ const DUEL_GAMES = new Map([
     [6, {name: "Getting Handsy", seen: false}],
 ]);
 function displayDuels() {
-    displayOptions(DUELS_DISPLAYED, DUEL_GAMES, DUEL_TYPE);
+    displayRandomGames(DUELS_DISPLAYED, DUEL_GAMES, DUEL_TYPE);
     selectGame();
 }
 
@@ -74,7 +88,7 @@ const FOUR_GAMES = new Map([
     [12, {name: "Money Grab", seen: false}],
 ]);
 function display4Player() {
-    displayOptions(FOURS_DISPLAYED, FOUR_GAMES, FOURS_TYPE);
+    displayRandomGames(FOURS_DISPLAYED, FOUR_GAMES, FOURS_TYPE);
     selectGame();
 }
 
@@ -86,16 +100,94 @@ const DOUBLE_GAMES = new Map([
     [2, {name: "Catch Me If You Can", seen: false}],
 ]);
 function displayDoubles() {
-    displayOptions(DOUBLES_DISPLAYED, DOUBLE_GAMES, DOUBLES_TYPE);
+    displayRandomGames(DOUBLES_DISPLAYED, DOUBLE_GAMES, DOUBLES_TYPE);
     selectGame();
 }
 
-// Variables for configuring the selector settings
-const ITERATIONS = 10; //default 60
-const START_SPEED = 75;
-const SPEED_BASE = 1.04;
+const PRICE_OPTIONS = ["1 Can", "2 Cans", "3 Cans"];
+function displayPrice() {
+    displayPrices(PRICE_OPTIONS);
+    selectGame();
+}
+
+// Variables for configuring the winner settings
 const FLASHES = 20; // must be even
 const FLASH_SPEED = 100;
+
+// Make the winning option flash. Note: FLASH_SPEED needs to be even, otherwise the winner ends up de-highlighted
+function winner() {
+    let i = 0;
+    let choice = document.getElementsByClassName("highlighted")[0];
+
+    // play the winning sound
+    var sfx = document.querySelector('input[name="win"]:checked').value;
+    let flashes = FLASHES;
+    let flash_speed = FLASH_SPEED;
+    switch(sfx) {
+        case "win1.wav":
+            flash_speed = 150;
+            flashes = 6;
+            break;
+        case "win2.wav":
+            flashes = 20;
+            break;
+        case "win3.wav":
+            flashes = 18;
+            break;
+        case "win4.wav":
+            flashes = 20;
+            break;
+        case "win5.wav":
+            flashes = 6;
+            flash_speed = 300;
+            break;
+    }
+    var sound = new Audio("sounds/"+sfx);
+    sound.play();
+    id = setInterval(flash, flash_speed);
+
+    // reveal the choice if it hasn't been revealed yet
+    if (choice.textContent == UNKNOWN_TITLE) {
+        num = choice.getAttribute("data-game");
+        game = null;
+        switch(choice.getAttribute("data-type")) {
+            case DUEL_TYPE:
+                game = DUEL_GAMES.get(parseInt(num));
+                game.seen = true;
+                DUEL_GAMES.set(parseInt(num), game);
+                break;
+            case DOUBLES_TYPE:
+                game = DOUBLE_GAMES.get(parseInt(num));
+                game.seen = true;
+                DOUBLE_GAMES.set(parseInt(num), game);
+                break;
+            case FOURS_TYPE:
+                game = FOUR_GAMES.get(parseInt(num));
+                game.seen = true;
+                FOUR_GAMES.set(parseInt(num), game);
+                break;
+        }
+        choice.textContent = game.name;
+    }
+    function flash() {
+        if (i == flashes) {
+            clearInterval(id);
+        } else {
+            let myClass = choice.getAttribute("class");
+            if (myClass == "highlighted option") {
+                choice.setAttribute("class","option");
+            } else {
+                choice.setAttribute("class","highlighted option");
+            }
+            i++;
+        }
+    }
+}
+
+// Variables for configuring the selectGame settings
+const ITERATIONS = 10; //default 60
+const SPEED_BASE = 1.04;
+const START_SPEED = 75;
 
 // selectGame randomly selects a game from the list currently visible
 function selectGame() {
@@ -141,76 +233,6 @@ function selectGame() {
             speed += Math.pow(SPEED_BASE, position);
             clearInterval(id);
             id = setInterval(cycle_options, speed);
-        }
-    }
-
-    // make the winning option flash. Note: FLASH_SPEED needs to be even, otherwise the winner ends up de-highlighted
-    function winner() {
-        let i = 0;
-        let choice = document.getElementsByClassName("highlighted")[0];
-
-        // play the winning sound
-        var sfx = document.querySelector('input[name="win"]:checked').value;
-        let flashes = FLASHES;
-        let flash_speed = FLASH_SPEED;
-        switch(sfx) {
-            case "win1.wav":
-                flash_speed = 150;
-                flashes = 6;
-                break;
-            case "win2.wav":
-                flashes = 20;
-                break;
-            case "win3.wav":
-                flashes = 18;
-                break;
-            case "win4.wav":
-                flashes = 20;
-                break;
-            case "win5.wav":
-                flashes = 6;
-                flash_speed = 300;
-                break;
-        }
-        var sound = new Audio("sounds/"+sfx);
-        sound.play();
-        id = setInterval(flash, flash_speed);
-
-        // reveal the choice if it hasn't been revealed yet
-        if (choice.textContent == UNKNOWN_TITLE) {
-            num = choice.getAttribute("data-game");
-            game = null;
-            switch(choice.getAttribute("data-type")) {
-                case DUEL_TYPE:
-                    game = DUEL_GAMES.get(parseInt(num));
-                    game.seen = true;
-                    DUEL_GAMES.set(parseInt(num), game);
-                    break;
-                case DOUBLES_TYPE:
-                    game = DOUBLE_GAMES.get(parseInt(num));
-                    game.seen = true;
-                    DOUBLE_GAMES.set(parseInt(num), game);
-                    break;
-                case FOURS_TYPE:
-                    game = FOUR_GAMES.get(parseInt(num));
-                    game.seen = true;
-                    FOUR_GAMES.set(parseInt(num), game);
-                    break;
-            }
-            choice.textContent = game.name;
-        }
-        function flash() {
-            if (i == flashes) {
-                clearInterval(id);
-            } else {
-                let myClass = choice.getAttribute("class");
-                if (myClass == "highlighted option") {
-                    choice.setAttribute("class","option");
-                } else {
-                    choice.setAttribute("class","highlighted option");
-                }
-                i++;
-            }
         }
     }
 }
