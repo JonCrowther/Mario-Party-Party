@@ -38,3 +38,16 @@
     display: flex;
     justify-content: center;
 }
+.price {
+    position: absolute;
+    top:100px;
+    right: 100px;
+    border: 5px solid green;
+    padding: 10px;
+}
+.price h1 {
+    font-size: xx-large;
+}
+.price p {
+    font-size: x-large;
+}

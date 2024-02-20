@@ -33,7 +33,7 @@ function buildPriceHTML(prices) {
     var html = "";
     for (var i = 0; i < prices.length; i++) {
         let name = prices[i];
-        html += '<div class="option"><p>' + name + '</p></div>';
+        html += '<div class="option" id="price' + i + '"><p>' + name + '</p></div>';
     }
     return html;
 }
@@ -114,10 +114,46 @@ function displayPrice() {
 const FLASHES = 20; // must be even
 const FLASH_SPEED = 100;
 
+// Update the price
+function updatePrice(choice) {
+    let newPrice = choice.textContent;
+    let currentPrice = document.getElementById("currentPrice");
+    currentPrice.textContent = newPrice;
+}
+
+// set the chosen game as seen and update the text from ???????
+function revealChoice(choice) {
+    num = choice.getAttribute("data-game");
+    game = null;
+    switch(choice.getAttribute("data-type")) {
+        case DUEL_TYPE:
+            game = DUEL_GAMES.get(parseInt(num));
+            game.seen = true;
+            DUEL_GAMES.set(parseInt(num), game);
+            break;
+        case DOUBLES_TYPE:
+            game = DOUBLE_GAMES.get(parseInt(num));
+            game.seen = true;
+            DOUBLE_GAMES.set(parseInt(num), game);
+            break;
+        case FOURS_TYPE:
+            game = FOUR_GAMES.get(parseInt(num));
+            game.seen = true;
+            FOUR_GAMES.set(parseInt(num), game);
+            break;
+    }
+    choice.textContent = game.name;
+}
+
 // Make the winning option flash. Note: FLASH_SPEED needs to be even, otherwise the winner ends up de-highlighted
-function winner() {
+function winner() {    
     let i = 0;
     let choice = document.getElementsByClassName("highlighted")[0];
+
+    let myId = choice.getAttribute("id");
+    if (myId != null && myId.includes("price")) {
+        updatePrice(choice);
+    }
 
     // play the winning sound
     var sfx = document.querySelector('input[name="win"]:checked').value;
@@ -148,33 +184,14 @@ function winner() {
 
     // reveal the choice if it hasn't been revealed yet
     if (choice.textContent == UNKNOWN_TITLE) {
-        num = choice.getAttribute("data-game");
-        game = null;
-        switch(choice.getAttribute("data-type")) {
-            case DUEL_TYPE:
-                game = DUEL_GAMES.get(parseInt(num));
-                game.seen = true;
-                DUEL_GAMES.set(parseInt(num), game);
-                break;
-            case DOUBLES_TYPE:
-                game = DOUBLE_GAMES.get(parseInt(num));
-                game.seen = true;
-                DOUBLE_GAMES.set(parseInt(num), game);
-                break;
-            case FOURS_TYPE:
-                game = FOUR_GAMES.get(parseInt(num));
-                game.seen = true;
-                FOUR_GAMES.set(parseInt(num), game);
-                break;
-        }
-        choice.textContent = game.name;
+        revealChoice(choice);
     }
     function flash() {
         if (i == flashes) {
             clearInterval(id);
         } else {
             let myClass = choice.getAttribute("class");
-            if (myClass == "highlighted option") {
+            if (myClass.includes("highlighted")) {
                 choice.setAttribute("class","option");
             } else {
                 choice.setAttribute("class","highlighted option");
