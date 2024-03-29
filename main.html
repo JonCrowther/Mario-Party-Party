@@ -6,60 +6,29 @@
 <body>
 
 <div class="price">
-    <h1>Price</p>
+    <h1 id="price-title">Price</p>
     <p id="currentPrice">1 Can</p>
 </div>
 
-<div>
-<p>Flash sound</p>
-<div>
-    <input type="radio" id="beep1" name="sfx" value="beep.wav">
-    <label for="beep1">BEEP1</label>
-    <input type="radio" id="beep2" name="sfx" value="beep2.wav">
-    <label for="beep2">BEEP2</label>
-    <input type="radio" id="beep3" name="sfx" value="beep3.wav">
-    <label for="beep3">BEEP3</label>
-    <input type="radio" id="click1" name="sfx" value="click1.wav">
-    <label for="click1">CLICK1</label>
-    <input type="radio" id="click2" name="sfx" value="click2.wav">
-    <label for="click2">CLICK2</label>
-    <input type="radio" id="click3" name="sfx" value="click3.wav">
-    <label for="click3">CLICK3</label>
-    <input type="radio" id="click4" name="sfx" value="click4.wav">
-    <label for="click4">CLICK4</label>
-</div>
-<p>Win sound</p>
-<div>
-    <input type="radio" id="win1" name="win" value="win1.wav">
-    <label for="win1">Option 1</label>
-    <input type="radio" id="win2" name="win" value="win2.wav">
-    <label for="win2">Option 2</label>
-    <input type="radio" id="win3" name="win" value="win3.wav">
-    <label for="win3">Option 3</label>
-    <input type="radio" id="win4" name="win" value="win4.wav">
-    <label for="win4">Option 4</label>
-    <input type="radio" id="win5" name="win" value="win5.wav">
-    <label for="win5">Option 5</label>
-</div>
-</div>
+<div class="container">
 
-<div class="gameTypes">
-    <button class="gameButton" onclick="displayDuels()">Duel</button>
-    <button class="gameButton" onclick="display4Player()">4 Person</button>
-    <button class="gameButton" onclick="displayDoubles()">Doubles</button>
-    <button class="gameButton" onclick="displayPrice()">Star Price</button>
-</div>
+    <div class="wheelType">
+        <button class="wheelOption" onclick="displayDuels()">Duel</button>
+        <button class="wheelOption" onclick="display4Player()">4 Person</button>
+        <button class="wheelOption" onclick="displayDoubles()">Doubles</button>
+        <button class="wheelOption" onclick="displayPrice()">Star Price</button>
+    </div>
 
-<!-- TODO: Make this wheel stay the same size no matter the options -->
-<div id ="wheel" padding="10px">
-    <div class="option"><p>Option1</p></div>
-    <div class="option"><p>Option2</p></div>
-    <div class="option"><p>Option3</p></div>
-    <div class="option"><p>Option4</p></div>
+    <div id ="wheel" padding="10px">
+        <div class="option"><p>Option1</p></div>
+        <div class="option"><p>Option2</p></div>
+        <div class="option"><p>Option3</p></div>
+        <div class="option"><p>Option4</p></div>
+    </div>
 </div>
 
 <!-- Once I've selected a wheel noise, put it in here -->
-<audio id="beep" src="sounds/click1.wav"></audio>
+<audio id="beep" src="sounds/click3.wav"></audio>
 
 <script type="text/javascript" src="wheel.js"></script>
 </body>

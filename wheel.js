@@ -1,5 +1,22 @@
 const UNKNOWN_TITLE="???????";
 
+window.addEventListener('keydown', function (e) {
+    switch(e.key) {
+        case 'q':
+            displayDuels();
+            break;
+        case 'w':
+            display4Player();
+            break;
+        case 'e':
+            displayDoubles();
+            break;
+        case 'r':
+            displayPrice();
+            break;
+    }
+}, false)
+
 // selectUnique returns an array of length toSelect that contain unique random numbers in the provided range
 function selectUnique(toSelect, range) {
     var arr = [];
@@ -142,7 +159,7 @@ function revealChoice(choice) {
             FOUR_GAMES.set(parseInt(num), game);
             break;
     }
-    choice.textContent = game.name;
+    choice.innerHTML = "<p>" + game.name + "</p>";
 }
 
 // Make the winning option flash. Note: FLASH_SPEED needs to be even, otherwise the winner ends up de-highlighted
@@ -156,7 +173,8 @@ function winner() {
     }
 
     // play the winning sound
-    var sfx = document.querySelector('input[name="win"]:checked').value;
+    //var sfx = document.querySelector('input[name="win"]:checked').value;
+    var sfx = "win1.wav";
     let flashes = FLASHES;
     let flash_speed = FLASH_SPEED;
     switch(sfx) {
@@ -238,11 +256,11 @@ function selectGame() {
             // play a sound
             // currently uses the radio buttons for testing, once a sound is selected,
             // uncomment code to use it. Needs the pause otherwise it plays poorly
-            //var sound = document.getElementById("beep");
-            var sfx = document.querySelector('input[name="sfx"]:checked').value;
-            var sound = new Audio("sounds/"+sfx);
-            //sound.pause();
-            //sound.currentTime = 0;
+            var sound = document.getElementById("beep");
+            //var sfx = document.querySelector('input[name="sfx"]:checked').value;
+            //var sound = new Audio("sounds/"+sfx);
+            sound.pause();
+            sound.currentTime = 0;
             sound.play();
             
             // increase the interval at which we cycle through the options exponentially

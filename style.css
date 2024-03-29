@@ -1,53 +1,76 @@
 .option {
-    width: 800px;
-    height: 200px;
-    line-height: 200px;
-    position: relative;
-    background: lightblue;
-    margin: auto;
-    width: 50%;
+    height: 180px;
+    line-height: 130px;
+    background: goldenrod;
+    border: 10px solid rgb(132, 97, 7);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
     text-align: center;
-    font-size: x-large;
+    font-size: xx-large;
+    border-radius: 50px;
+    font-family: cursive;
 }
 .highlighted {
-    background: darkblue;
+    background: beige;
 }
-.gameButton {
+.wheelType .wheelOption {
     width: 200px;
-    margin: auto;
-    display: inline;
+    display: inline-block;
+    background-color: goldenrod;
+    text-align: center;
+    text-decoration: none;
+    font-size: 34px;
+    cursor: pointer;
+    border: 2px solid rgb(132, 97, 7);
+    font-family: cursive;
+    border-radius: 10px;
+    margin-right: 5px;
 }
+
+.wheelType .wheelOption:hover {
+    background-color: rgb(132, 97, 7);
+}
+
 .spinButton {
     width: 200px;
     margin: auto;
     display: inline;
 }
-.gameTypes {
+.wheelType {
     margin: auto;
-    width: 50%;
-    border: 3px solid green;
+    width: 100%;
     padding: 10px;
     display: flex;
     justify-content: space-between;
-}
-.center {
-    margin: auto;
-    width: 50%;
-    border: 3px solid green;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
+    border-radius: 10px;
 }
 .price {
     position: absolute;
+    background-color: goldenrod;
     top:100px;
     right: 100px;
-    border: 5px solid green;
+    width: 100px;
+    border: 7px solid rgb(132, 97, 7);
     padding: 10px;
+    border-radius: 15px;
+    font-family: cursive;
+    text-align: center;
 }
 .price h1 {
     font-size: xx-large;
 }
 .price p {
     font-size: x-large;
+}
+body {
+    background-image: url("background4.jpg");
+    background-size: 100%;
+}
+.container {
+    position: absolute;
+    width: 800px;
+    top: 50%;
+    left: 50%;
+    margin: -500px 0 0 -400px;
 }
