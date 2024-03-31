@@ -11,6 +11,21 @@
     border-radius: 50px;
     font-family: cursive;
 }
+.title {
+    height: 100px;
+    line-height: 100px;
+    background: goldenrod;
+    border: 10px solid rgb(132, 97, 7);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: -15%;
+    width: 130%;
+    text-align: center;
+    font-size: 40px;
+    border-radius: 50px;
+    font-family: cursive;
+    font-weight: bold;
+}
 .highlighted {
     background: beige;
 }
@@ -50,7 +65,7 @@
     background-color: goldenrod;
     top:100px;
     right: 100px;
-    width: 100px;
+    width: 150px;
     border: 7px solid rgb(132, 97, 7);
     padding: 10px;
     border-radius: 15px;
@@ -58,10 +73,10 @@
     text-align: center;
 }
 .price h1 {
-    font-size: xx-large;
+    font-size: 40px;
 }
 .price p {
-    font-size: x-large;
+    font-size: 32px;
 }
 body {
     background-image: url("background4.jpg");

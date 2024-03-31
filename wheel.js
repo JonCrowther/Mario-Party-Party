@@ -1,5 +1,6 @@
 const UNKNOWN_TITLE="???????";
 
+// Selects a wheel based on key press
 window.addEventListener('keydown', function (e) {
     switch(e.key) {
         case 'q':
@@ -9,10 +10,19 @@ window.addEventListener('keydown', function (e) {
             display4Player();
             break;
         case 'e':
-            displayDoubles();
+            displayBowsers();
             break;
         case 'r':
+            displayDKs();
+            break;
+        case 't':
             displayPrice();
+            break;
+        case 'a':
+            displayGameRewards();
+            break;
+        case 's':
+            displayDuelRewards();
             break;
     }
 }, false)
@@ -55,14 +65,20 @@ function buildPriceHTML(prices) {
     return html;
 }
 
+function buildGameRewardHTML(rewards, numRewards) {
+    var arr = selectUnique(numRewards, rewards.length);
+    var html = "";
+    for (var i = 0; i < arr.length; i++) {
+        let reward = arr[i];
+        html += '<div class="option"><p>' + rewards[reward] +'</p></div>';
+    }
+    return html
+}
+
 // displayRandomGames updates the options to be displayed
 function displayRandomGames(optionsDisplayed, gamesMap, gameType) {
     var arr = selectUnique(optionsDisplayed, gamesMap.size);
-    console.log(arr);
-
     var html = buildGameHTML(gamesMap, arr, gameType);
-    console.log(html);
-
     document.getElementById("wheel").innerHTML = html;
 }
 
@@ -77,12 +93,13 @@ const DUEL_GAMES = new Map([
     [0, {name: "Klask", seen: false}],
     [1, {name: "Foosketball", seen: false}],
     [2, {name: "Mitten Masters", seen: false}],
-    [3, {name: "Show and Tell!", seen: false}],
-    [4, {name: "Spaghetti Slice", seen: false}],
-    [5, {name: "Trace Race", seen: false}],
-    [6, {name: "Getting Handsy", seen: false}],
+    [3, {name: "Getting Handsy", seen: false}],
+    [4, {name: "Stacks on Stacks", seen: false}],
+    [5, {name: "Ball Brawl", seen: false}],
+    [6, {name: "Thar She Blows", seen: false}],
 ]);
 function displayDuels() {
+    document.getElementById("title").innerHTML = "Duel Minigame!";
     displayRandomGames(DUELS_DISPLAYED, DUEL_GAMES, DUEL_TYPE);
     selectGame();
 }
@@ -91,39 +108,90 @@ const FOURS_DISPLAYED = 4;
 const FOURS_TYPE = "four";
 const FOUR_GAMES = new Map([
     [0, {name: "Blow the Joker", seen: false}],
-    [1, {name: "Eye to Eye", seen: false}],
-    [2, {name: "Fork 'em Over", seen: false}],
-    [3, {name: "Cereal Thrillers", seen: false}],
-    [4, {name: "Loony Spoons", seen: false}],
-    [5, {name: "Ping Pong Panic", seen: false}],
-    [6, {name: "Stacks on Stacks", seen: false}],
-    [7, {name: "Hips Don't Lie", seen: false}],
-    [8, {name: "Scrabble Dabble", seen: false}],
-    [9, {name: "Air Headed", seen: false}],
-    [10, {name: "Touch the Cat", seen: false}],
-    [11, {name: "On a Roll", seen: false}],
-    [12, {name: "Money Grab", seen: false}],
+    [1, {name: "Loony Spoons", seen: false}],
+    [2, {name: "Ping Pong Panic", seen: false}],
+    [3, {name: "Scrabble Dabble", seen: false}],
+    [4, {name: "Air Headed", seen: false}],
+    [5, {name: "Touch the Cat", seen: false}],
+    [6, {name: "On a Roll", seen: false}],
+    [7, {name: "Cash Grab", seen: false}],
+    [8, {name: "Matchsticks", seen: false}],
+    [9, {name: "Cups and Downs", seen: false}],
+    [10, {name: "Catch Me If You Can", seen: false}],
+    [11, {name: "Got Your Back", seen: false}],
+    [12, {name: "A Dicey Alliance", seen: false}],
 ]);
 function display4Player() {
+    document.getElementById("title").innerHTML = "Free For All Minigame!";
     displayRandomGames(FOURS_DISPLAYED, FOUR_GAMES, FOURS_TYPE);
     selectGame();
 }
 
-const DOUBLES_DISPLAYED = 3;
-const DOUBLES_TYPE = "double";
-const DOUBLE_GAMES = new Map([
-    [0, {name: "Got Your Back", seen: false}],
-    [1, {name: "Puzzle Partners", seen: false}],
-    [2, {name: "Catch Me If You Can", seen: false}],
+const BOWSER_DISPLAYED = 3;
+const BOWSER_TYPE = "bowser";
+const BOWSER_GAMES = new Map([
+    [0, {name: "Money Shot", seen: false}],
+    [1, {name: "Long Shot", seen: false}],
+    [2, {name: "Big Shot", seen: false}],
 ]);
-function displayDoubles() {
-    displayRandomGames(DOUBLES_DISPLAYED, DOUBLE_GAMES, DOUBLES_TYPE);
+function displayBowsers() {
+    document.getElementById("title").innerHTML = "Bowser Minigame!";
+    displayRandomGames(BOWSER_DISPLAYED, BOWSER_GAMES, BOWSER_TYPE);
+    selectGame();
+}
+
+const DK_DISPLAYED = 3;
+const DK_TYPE = "dk";
+const DK_GAMES = new Map([
+    [0, {name: "Fork 'em Over", seen: false}],
+    [1, {name: "Cup, Cup, and Away", seen: false}],
+    [2, {name: "Hips Don't Lie", seen: false}],
+]);
+function displayDKs() {
+    document.getElementById("title").innerHTML = "Donkey Kong Minigame!";
+    displayRandomGames(DK_DISPLAYED, DK_GAMES, DK_TYPE);
     selectGame();
 }
 
 const PRICE_OPTIONS = ["1 Can", "2 Cans", "3 Cans"];
 function displayPrice() {
+    document.getElementById("title").innerHTML = "New Star Price...";
     displayPrices(PRICE_OPTIONS);
+    selectGame();
+}
+
+const GAME_REWARDS = [
+    "+3 to Dice Roll",
+    "+2 to Dice Roll",
+    "+2 to Dice Roll",
+    "+1 to Dice Roll",
+    "+1 to Dice Roll",
+    "+1 to Dice Roll",
+    "Free Re-Roll",
+    "A Beer",
+    "-1 Dice Roll to Someone Else",
+    "Nothing!",
+];
+function displayGameRewards() {
+    document.getElementById("title").innerHTML = "Minigame Reward...";
+    html = buildGameRewardHTML(GAME_REWARDS, 4);
+    document.getElementById("wheel").innerHTML = html;
+    selectGame();
+}
+
+const DUEL_REWARDS = [
+    "Swap Places",
+    "Give a Jello Shot",
+    "Give a Jello Shot",
+    "Steal a Beer",
+    "Steal a Star",
+    "Move Loser 3 Spaces",
+    "Winner Moves 3 Spaces",
+];
+function displayDuelRewards() {
+    document.getElementById("title").innerHTML = "Duel Reward...";
+    html = buildGameRewardHTML(DUEL_REWARDS, 3);
+    document.getElementById("wheel").innerHTML = html;
     selectGame();
 }
 
@@ -141,24 +209,24 @@ function updatePrice(choice) {
 // set the chosen game as seen and update the text from ???????
 function revealChoice(choice) {
     num = choice.getAttribute("data-game");
-    game = null;
+    games = null;
     switch(choice.getAttribute("data-type")) {
         case DUEL_TYPE:
-            game = DUEL_GAMES.get(parseInt(num));
-            game.seen = true;
-            DUEL_GAMES.set(parseInt(num), game);
+            games = DUEL_GAMES;
             break;
-        case DOUBLES_TYPE:
-            game = DOUBLE_GAMES.get(parseInt(num));
-            game.seen = true;
-            DOUBLE_GAMES.set(parseInt(num), game);
+        case BOWSER_TYPE:
+            games = BOWSER_GAMES;
             break;
         case FOURS_TYPE:
-            game = FOUR_GAMES.get(parseInt(num));
-            game.seen = true;
-            FOUR_GAMES.set(parseInt(num), game);
+            games = FOUR_GAMES;
+            break;
+        case DK_TYPE:
+            games = DK_GAMES;
             break;
     }
+    game = games.get(parseInt(num));
+    game.seen = true;
+    games.set(parseInt(num), game);
     choice.innerHTML = "<p>" + game.name + "</p>";
 }
 
