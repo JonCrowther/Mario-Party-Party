@@ -1,13 +1,13 @@
 .option {
     height: 180px;
-    line-height: 130px;
+    line-height: 70px;
     background: goldenrod;
     border: 10px solid rgb(132, 97, 7);
     margin-top: 10px;
     margin-bottom: 10px;
     width: 100%;
     text-align: center;
-    font-size: xx-large;
+    font-size: 60px;
     border-radius: 50px;
     font-family: cursive;
 }
@@ -21,7 +21,7 @@
     margin-left: -15%;
     width: 130%;
     text-align: center;
-    font-size: 40px;
+    font-size: 75px;
     border-radius: 50px;
     font-family: cursive;
     font-weight: bold;
@@ -35,7 +35,7 @@
     background-color: goldenrod;
     text-align: center;
     text-decoration: none;
-    font-size: 34px;
+    font-size: 50px;
     cursor: pointer;
     border: 2px solid rgb(132, 97, 7);
     font-family: cursive;
@@ -65,18 +65,18 @@
     background-color: goldenrod;
     top:100px;
     right: 100px;
-    width: 150px;
-    border: 7px solid rgb(132, 97, 7);
+    width: 240px;
+    border: 10px solid rgb(132, 97, 7);
     padding: 10px;
     border-radius: 15px;
     font-family: cursive;
     text-align: center;
 }
 .price h1 {
-    font-size: 40px;
+    font-size: 70px;
 }
 .price p {
-    font-size: 32px;
+    font-size: 60px;
 }
 body {
     background-image: url("background4.jpg");
@@ -87,5 +87,5 @@ body {
     width: 800px;
     top: 50%;
     left: 50%;
-    margin: -500px 0 0 -400px;
+    margin: -480px 0 0 -400px;
 }
