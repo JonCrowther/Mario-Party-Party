@@ -24,6 +24,9 @@ window.addEventListener('keydown', function (e) {
         case 's':
             displayDuelRewards();
             break;
+        case 'd':
+            incrementPrice();
+            break;
     }
 }, false)
 
@@ -168,8 +171,10 @@ const GAME_REWARDS = [
     "+1 to Dice Roll",
     "Free Re-Roll",
     "A Beer",
+    "A Beer",
+    "A Beer",
+    "A Beer",
     "A Sparkling Water",
-    "A Seltzer",
     "A Drink of Choice",
     "-1 Dice Roll to Someone Else",
     "Nothing!",
@@ -185,6 +190,8 @@ const DUEL_REWARDS = [
     "Swap Places",
     "Give a Jello Shot",
     "Give a Jello Shot",
+    "Steal a Can",
+    "Steal a Can",
     "Steal a Can",
     "Steal a Star",
     "Move Loser 3 Spaces",
@@ -205,6 +212,23 @@ const FLASH_SPEED = 100;
 function updatePrice(choice) {
     let newPrice = choice.textContent;
     let currentPrice = document.getElementById("currentPrice");
+    currentPrice.textContent = newPrice;
+}
+
+function incrementPrice() {
+    let currentPrice = document.getElementById("currentPrice");
+    var newPrice = "";
+    switch(currentPrice.textContent) {
+        case "1 Can":
+            newPrice = "2 Cans";
+            break;
+        case "2 Cans":
+            newPrice = "3 Cans";
+            break;
+        case "3 Cans":
+            newPrice = "1 Can";
+            break;
+    }
     currentPrice.textContent = newPrice;
 }
 
@@ -290,7 +314,7 @@ function winner() {
 }
 
 // Variables for configuring the selectGame settings
-const ITERATIONS = 10; //default 60
+const ITERATIONS = 40; //default 60
 const SPEED_BASE = 1.04;
 const START_SPEED = 75;
 

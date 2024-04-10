@@ -80,7 +80,7 @@
 }
 body {
     background-image: url("background4.jpg");
-    background-size: 100%;
+    background-size: cover;
 }
 .container {
     position: absolute;
